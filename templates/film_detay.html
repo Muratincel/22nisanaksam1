@@ -1,0 +1,118 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block content %}
+
+    <style>
+        .text-justify{
+            text-align: justify;
+        }
+
+        .stars{
+            display: flex;
+        }
+
+        .star{
+            color: #ddd;
+            font-size: 16px;
+            margin-right: 2px;
+        }
+
+        .star.filled{
+            color: goldenrod;
+        }
+    </style>
+
+
+    <div class="container py-5">
+        <h1 class="text-warning text-center fw-bold mb-4">{{film.isim}}</h1>
+        <div class="row">
+            <div class="col-5">
+                <img class="w-100" src="{{film.resim.url}}" alt=""> <br>
+                <a class="btn btn-secondary mt-3 d-block" href="{% url 'film_fragman' film.id %}">Fragmanı İzle</a>
+            </div>
+
+            <div class="col-7">
+                <p class="text-white text-justify">{{film.aciklama}}</p>
+            </div>
+        </div>
+
+
+    <!-- ! Oyuncularla İlgili Bölüm -->
+
+    <div class="row mt-5">
+        <h2 class="text-warning fw-bold">Oyuncular</h2>
+        <hr class="text-white">
+        {% for actor in film.actors.all %}
+        <div class="col-2 mt-4">
+            <img class="w-100" height="230px" src="{{actor.photo.url}}" alt="">
+            <p class="text-white text-center mt-3">{{actor.name}}</p>
+        </div>
+        {% empty %}
+            <p class="text-white text-center">Bu filmde oyuncu bilgisi bulunmamaktadır!</p>
+        {% endfor %}
+    </div>
+
+    <!-- ! Yorumlarla İlgili Alan -->
+    <div class="row">
+        <h2 class="text-warning fw-bold mt-4">Yorumlar</h2>
+        <hr class="text-white">
+        <div class="col-12 m-auto">
+            <ul class="p-0 mb-4">
+                {% for yorum in yorumlar %}
+                <li class="text-white list-unstyled border border-1 border-white p-4 mb-3 rounded-3">
+                    <strong class="text-warning fs-5 border-bottom border-2 border-secondary">{{yorum.user.username}}</strong><br>
+                    <div class="stars">
+                        {% for i in "12345" %}
+                            {% if i|add:0 <= yorum.rating %}
+                                <span class="star filled">★</span>
+                            {% else %}
+                                <span class="star">★</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="text-white mt-3">{{yorum.text}}</p>
+                    <small class="float-end text-white">
+                        {% if yorum.updated_at %}
+                            {% if yorum.updated_at != yorum.created_at %}
+                                Düzenleme Tarihi :{{yorum.updated_at}}
+                            {% else %}
+                                Oluşturulma Tarihi :{{yorum.created_at}}
+                            {% endif %}
+                        {% else %}
+                                Oluşturulma Tarihi :{{yorum.created_at}}
+                        {% endif %}
+                    </small>
+
+                    <!-- ! Düzenle ve Sil Butonları -->
+                    <a class="btn btn-primary btn-sm" href="{% url 'yorum_duzenle' yorum.id %}">Düzenle</a>
+                    <a class="btn btn-warning btn-sm" onclick="return confirm('Yorumunuzu silmek istediğinize emin misiniz');" href="{% url 'yorum_sil' yorum.id %}">Sil</a>
+                {% empty %}
+                    <p class="text-white text-center">Bu filmle ilgili bir yorum yok. İlk yorumu yapmak ister misin?</p>
+                {% endfor %}
+                </li>
+            </ul>
+
+            {% if user.is_authenticated %}
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="text-warning fw-bold mt-3">Yorum Yap</h3>
+                    <form method="POST" class="w-100">
+                        {% csrf_token %}
+                        {{form}}
+                        <button type="submit" class="btn btn-outline-primary mt-3">Yorumu Gönder</button>
+                    </form>
+            {% else %}
+                    <p class="text-white text-center">Yorum yapabilmek için giriş yapmanız gerekiyor.</p>
+            {% endif %}
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    </div>
+
+{% include "includes/_footer.html" %}
+{% endblock content %}
+

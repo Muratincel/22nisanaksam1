@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block content %}
+<div class="hero-image">
+    <div style="padding-top: 15%;" class="container">
+        <form method="POST" enctype="multipart/form-data" class="w-50 m-auto border border-1 p-3 text-white">
+            <h2 class="text-warning text-center fw-bold">Profil Oluştur</h2>
+            {% csrf_token %}
+            <label class="text-secondary fw-bold">İsim :</label>
+            {{form.isim}}
+
+            <label class="text-secondary fw-bold">Resim:</label>
+            {{form.resim}}
+            <input type="submit" value="Oluştur" class="btn btn-outline-warning mt-3">
+            <a class="btn btn-outline-danger mt-3" href="{% url 'profiles' %}">Vazgeç</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

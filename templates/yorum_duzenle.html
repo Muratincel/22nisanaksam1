@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container py-5">
+        <h2 class="text-white text-center fw-bold">Yorumu Düzenle</h2>
+        <div class="row">
+            <div class="col-6 m-auto">
+                <form method="POST" class="w-100 border border-1 border-white p-3 rounded-3 text-white">
+                    {% csrf_token %}
+                    {{form}}
+                    <button type="submit" class="btn btn-primary mt-3">Yorumu Güncelle</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

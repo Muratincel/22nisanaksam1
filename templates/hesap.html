@@ -1,0 +1,179 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesap</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- My CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body, html {
+            color: black;
+            background-color: beige;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            margin-top: 100px;
+        }
+        .accordion, .panel {
+            background-color: rgba(34, 34, 34, 0);
+            color: black;
+        }
+        .con-footer {
+            position: absolute;
+            bottom: -220px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-black fixed-top navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"><img src="{% static 'img/netflix_logo.png' %}" width="40" alt=""></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">Anasayfa</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Diziler</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Filmler</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Yeni ve popüler</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Listem</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if user.resim %}
+                    <img width="50px" height="50px" class="rounded-circle" src="{{user.resim.url}}" alt="">
+                    {% else %}
+                    <img width="50px" height="50px" class="rounded-circle" src="https://st3.depositphotos.com/6672868/14217/v/450/depositphotos_142179970-stock-illustration-user-profile-icon.jpg" alt="">
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="{% url 'profiles' %}">Profil Yönetimi</a></li>
+                  <li>
+                      <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="{% url 'hesap' %}">Hesap</a></li>
+                  <li><a class="dropdown-item" href="#">Yardım Merkezi</a></li>
+                  <li><a class="dropdown-item" href="{% url 'logout' %}">Netflix oturumunu kapat</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <!-- Hesap -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+
+                <div class="row">
+                    <h1>Hesap</h1>
+                    <hr>
+                    <div class="col">
+                        <h4>Üyelik ve Ödemeler</h4>
+                        <form  method="POST" id="deleteAccountForm"  action="{% url 'account_delete' %}">
+                            {% csrf_token %}
+                            <button type="button" onclick="confirmDelete()" >Üyeliği iptal et</button>
+                        </form>
+                        
+                    </div>
+                    <div class="col">
+                        <strong>{{user.email}}</strong>
+                        <p>Parola:*******</p>
+                        <p>tel: {{user.tel}}</p>
+                    </div>
+                    <div class="col">
+                        <a href="">E-postayi değiştir</a> <br>
+                        <a href="{% url 'password_change' %}">Parolayı değiştir</a> <br>
+                        <a href="">Telefon numarasını değiştir</a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <hr>
+                    <div class="col">
+                        <h4>Ayarlar</h4>
+                    </div>
+
+                    <div class="col">
+                        <a href="">18+ İçerik</a> <br>
+                        <a href="">Teste katılın</a> <br>
+                        <a href="">İçerik indirilen cihazları yönet</a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <hr>
+                    <div class="col">
+                        <h4>Profil ve ebeveyn kontrolleri</h4>
+                    </div>
+
+                    <div class="col">
+                        <button class="accordion">
+                        {% if user.resim %}
+                            <img width="50px" height="50px" class="rounded-circle" src="{{user.resim.url}}" alt="">
+                        {% else %}
+                            <img width="50px" height="50px" class="rounded-circle" src="https://st3.depositphotos.com/6672868/14217/v/450/depositphotos_142179970-stock-illustration-user-profile-icon.jpg" alt="">
+                            {{user.isim}}
+                        {% endif %} 
+                        </button>
+                        <div class="panel">
+                            <p>
+                                <strong>Dil</strong> <br>
+                                <a href="" class="text-end">Değiştir</a>
+                            </p>
+                            <hr>
+                            <p>
+                                <strong>İzleme Kısıtlamaları</strong> <br>
+                                <a href="" class="text-end">Değiştir</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% include "includes/_footer.html" %}
+{% endblock content %}
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+    <script>
+        function confirmDelete(){
+            if (confirm("hesabinizi silmek istediginize emin misiniz?")){
+                document.querySelector("#deleteaccountForm").submit()
+            }
+        }
+    </script>
+</body>
+</html>

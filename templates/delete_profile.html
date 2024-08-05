@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="hero-image">
+        <div class="container pt-5">
+            <form method="POST" class="w-50 m-auto border border-1 border-white p-3">
+                {% csrf_token %}
+                <h2 class="text-center text-white">{{profile.isim}}, Profili silmek istediğine emin misin?</h2>
+                <button class="btn btn-outline-danger mt-3" type="submit">Sil</button>
+                <a class="btn btn-outline-secondary mt-3" href="{% url 'profiles' %}">İptal</a>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

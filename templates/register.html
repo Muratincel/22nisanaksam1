@@ -1,0 +1,70 @@
+{% extends "index.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+{% block content %}
+<div class="hero-image">
+    <div class="container py-5">
+        <form method="POST" enctype="multipart/form-data" class="w-50 m-auto border border-1 p-3 text-white mt-4">
+            <h2 class="text-center text-danger fw-bold">Kullanıcı Kayıt Formu</h2>
+            {% csrf_token %}
+            <!-- <label class="text-secondary fw-bold">Kullanıcı Adı:</label> -->
+            {% comment %} {{form.username}} {% endcomment %}
+
+            <!-- <label class="text-secondary fw-bold">Email:</label> -->
+            {% comment %} {{form.email}} {% endcomment %}
+
+            <!-- <label class="text-secondary fw-bold">Parola:</label> -->
+            {% comment %} {{form.password1}} {% endcomment %}
+
+            <!-- <label class="text-secondary fw-bold">Parola Tekrar:</label> -->
+            {% comment %} {{form.password2}} {% endcomment %}
+
+            <!-- ! Kullanıcıdan Ekstra İşlem İstenirse; -->
+            <label>Kullanıcı Adı:</label>
+            <input type="text" name="kullaniciAdi" placeholder="Kullanıcı Adı" class="form-control mb-2">
+
+            <label>İsim:</label>
+            <input type="text" name="isim" placeholder="İsim" class="form-control mb-2">
+
+            <label>Soyisim:</label>
+            <input type="text" name="soyisim" placeholder="Soyisim" class="form-control mb-2">
+
+            <label>Email:</label>
+            <input type="email" name="email" placeholder="Email" class="form-control mb-2">
+
+            <label>Resim:</label>
+            <input type="file" name="resim" placeholder="Resim" class="form-control mb-2">
+
+            <label>Telefon:</label>
+            <input type="tel" name="tel" placeholder="Telefon Numarası" class="form-control mb-2">
+
+            <label>Doğum Tarihi:</label>
+            <input type="date" name="dogum" class="form-control mb-2">
+
+            <label>Şifre</label>
+            <input type="password" name="sifre1" placeholder="Şifre" class="form-control mb-2">
+
+            <label>Şifre Tekrar</label>
+            <input type="password" name="sifre2" placeholder="Şifre Tekrar" class="form-control mb-2">
+
+            <input type="submit" class="btn btn-danger mt-3 mb-2" value="Kayıt Ol">
+            <br>
+            <a class="text-decoration-none text-white" href="{% url 'login' %}">Zaten hesabın var mı?</a>
+        </form>
+    </div>
+</div>
+<!-- Footer -->
+{% include "includes/_footer.html" %}   
+{% endblock content %}
+
+</body>
+</html>
